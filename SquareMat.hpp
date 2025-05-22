@@ -1,3 +1,4 @@
+agassinoa20@gmail.com
 #ifndef SQUARMAT_HPP
 #define SQUARMAT_HPP
 
