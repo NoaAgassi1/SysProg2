@@ -1,3 +1,4 @@
+agassinoa20@gmail.com
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra
 
