@@ -1,3 +1,4 @@
+agassinoa20@gmail.com
 #include "SquareMat.hpp"
 #include <iostream>
 #include <vector>
