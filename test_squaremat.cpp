@@ -1,4 +1,4 @@
-agassinoa20@gmail.com
+//agassinoa20@gmail.com
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 #include "doctest.h"
 #include "SquareMat.hpp"
@@ -59,8 +59,8 @@ TEST_SUITE("Basic Operations") {
         double expectedMod[] = {1, 2, 0, 1};
         CHECK(isEqual(m % 3, SquareMat(2, expectedMod)));
 
-        CHECK_THROWS_AS(m / 0, std::invalid_argument);
-        CHECK_THROWS_AS(m % 0, std::invalid_argument);
+        CHECK_THROWS_AS(m / 0, MatrixException);
+        CHECK_THROWS_AS(m % 0, MatrixException);
     }
 
     TEST_CASE("Determinant") {
@@ -135,7 +135,7 @@ TEST_SUITE("Copy / Assignment") {
 
 TEST_SUITE("Exceptions and invalid input") {
     TEST_CASE("Invalid construction") {
-        CHECK_THROWS_AS(SquareMat(0), std::invalid_argument);
+        CHECK_THROWS_AS(SquareMat(0), MatrixException);
     }
 
     TEST_CASE("Mismatched matrix sizes") {
@@ -143,10 +143,10 @@ TEST_SUITE("Exceptions and invalid input") {
         double d3[] = {1,2,3,4,5,6,7,8,9};
         SquareMat m2(2, d2);
         SquareMat m3(3, d3);
-        CHECK_THROWS_AS(m2 + m3, std::invalid_argument);
-        CHECK_THROWS_AS(m2 - m3, std::invalid_argument);
-        CHECK_THROWS_AS(m2 * m3, std::invalid_argument);
-        CHECK_THROWS_AS(m2 % m3, std::invalid_argument);
+        CHECK_THROWS_AS(m2 + m3, MatrixException);
+        CHECK_THROWS_AS(m2 - m3, MatrixException);
+        CHECK_THROWS_AS(m2 * m3, MatrixException);
+        CHECK_THROWS_AS(m2 % m3, MatrixException);
     }
 }
 
