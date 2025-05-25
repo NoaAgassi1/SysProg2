@@ -1,14 +1,14 @@
-agassinoa20@gmail.com
+//agassinoa20@gmail.com
 #include "SquareMat.hpp"
-#include <stdexcept>
 #include <cmath>
+#include <iostream>
 
 namespace matrix {
 
 /// @brief Constructor that initializes a size x size matrix with zeros
 SquareMat::SquareMat(int size) : size(size), matrix(nullptr) {
     if (size <= 0) {
-        throw std::invalid_argument("matrix size must be positive");
+        throw MatrixException("matrix size must be positive");
     }
     matrix = new double[size * size];
     for (int i = 0; i < size * size; ++i) {
@@ -19,7 +19,7 @@ SquareMat::SquareMat(int size) : size(size), matrix(nullptr) {
 /// @brief Constructor that initializes a matrix with provided values
 SquareMat::SquareMat(int size, const double* initData) : size(size), matrix(nullptr) {
     if (size <= 0) {
-        throw std::invalid_argument("matrix size must be positive");
+        throw MatrixException("matrix size must be positive");
     }
     matrix = new double[size * size];
     for (int i = 0; i < size * size; ++i) {
@@ -59,7 +59,7 @@ void SquareMat::copyMem(const SquareMat& other) {
 // Non-const index access operator: returns a proxy Row object.
 SquareMat::Row SquareMat::operator[](int row) {
     if (row < 0 || row >= size) {
-        throw std::out_of_range("Row index out of bounds");
+        throw MatrixException("Row index out of bounds");
     }
     return Row(matrix + row * size);
 }
@@ -67,7 +67,7 @@ SquareMat::Row SquareMat::operator[](int row) {
 // Const index access operator: returns a proxy ConstRow object.
 SquareMat::ConstRow SquareMat::operator[](int row) const {
     if (row < 0 || row >= size) {
-        throw std::out_of_range("Row index out of bounds");
+        throw MatrixException("Row index out of bounds");
     }
     return ConstRow(matrix + row * size);
 }
@@ -75,7 +75,7 @@ SquareMat::ConstRow SquareMat::operator[](int row) const {
 // Implementation of Row's operator[]
 double& SquareMat::Row::operator[](int col) {
     if (col < 0) {
-        throw std::out_of_range("Column index cannot be negative");
+        throw MatrixException("Column index cannot be negative");
     }
     // Note: We assume the caller knows the matrix dimensions;
     return rowData[col];
@@ -84,14 +84,14 @@ double& SquareMat::Row::operator[](int col) {
 // Implementation of ConstRow's operator[]
 const double& SquareMat::ConstRow::operator[](int col) const {
     if (col < 0) {
-        throw std::out_of_range("Column index cannot be negative");
+        throw MatrixException("Column index cannot be negative");
     }
     return rowData[col];
 }
 /// @brief Element-wise addition assignment
 SquareMat& SquareMat::operator+=(const SquareMat& rhs) {
     if (size != rhs.size) {
-        throw std::invalid_argument("Matrices must have the same dimensions for +=");
+        throw MatrixException("Matrices must have the same dimensions for +=");
     }
     for (int i = 0; i < size * size; ++i) {
         matrix[i] += rhs.matrix[i];
@@ -102,7 +102,7 @@ SquareMat& SquareMat::operator+=(const SquareMat& rhs) {
 /// @brief Element-wise subtraction assignment
 SquareMat& SquareMat::operator-=(const SquareMat& rhs) {
     if (size != rhs.size) {
-        throw std::invalid_argument("Matrices must have the same dimensions for -=");
+        throw MatrixException("Matrices must have the same dimensions for -=");
     }
     for (int i = 0; i < size * size; ++i) {
         matrix[i] -= rhs.matrix[i];
@@ -113,7 +113,7 @@ SquareMat& SquareMat::operator-=(const SquareMat& rhs) {
 /// @brief Standard matrix multiplication assignment
 SquareMat& SquareMat::operator*=(const SquareMat& rhs) {
     if (size != rhs.size) {
-        throw std::invalid_argument("Matrices must have the same dimensions for multiplication");
+        throw MatrixException("Matrices must have the same dimensions for multiplication");
     }
     SquareMat result(size);
     for (int i = 0; i < size; ++i) {
@@ -140,7 +140,7 @@ SquareMat& SquareMat::operator*=(double scalar) {
 /// @brief Scalar division assignment
 SquareMat& SquareMat::operator/=(double scalar) {
     if (scalar == 0.0) {
-        throw std::invalid_argument("Division by zero");
+        throw MatrixException("Division by zero");
     }
     for (int i = 0; i < size * size; ++i) {
         matrix[i] /= scalar;
@@ -151,7 +151,7 @@ SquareMat& SquareMat::operator/=(double scalar) {
 /// @brief Element-wise multiplication assignment
 SquareMat& SquareMat::operator%=(const SquareMat& rhs) {
     if (size != rhs.size) {
-        throw std::invalid_argument("Matrices must have the same dimensions for element-wise multiplication");
+        throw MatrixException("Matrices must have the same dimensions for element-wise multiplication");
     }
     for (int i = 0; i < size * size; ++i) {
         matrix[i] *= rhs.matrix[i];
@@ -162,7 +162,7 @@ SquareMat& SquareMat::operator%=(const SquareMat& rhs) {
 /// @brief Scalar modulo assignment
 SquareMat& SquareMat::operator%=(int mod) {
     if (mod == 0) {
-        throw std::invalid_argument("Modulo by zero is undefined");
+        throw MatrixException("Modulo by zero is undefined");
     }
     for (int i = 0; i < size * size; ++i) {
         matrix[i] = std::fmod(matrix[i], static_cast<double>(mod));
@@ -221,7 +221,7 @@ SquareMat SquareMat::operator~() const {
 }
 double SquareMat::operator!() const {
     if (size == 0) {
-        throw std::logic_error("Determinant undefined for 0x0 matrix.");}
+        throw MatrixException("Determinant undefined for 0x0 matrix.");}
 
     if (size == 1) {
         return matrix[0];}
@@ -255,7 +255,7 @@ double SquareMat::operator!() const {
 /// @brief Power operation using binary exponentiation
 SquareMat SquareMat::operator^(int power) const {
     if (power < 0) {
-        throw std::invalid_argument("Negative powers not supported");
+        throw MatrixException("Negative powers not supported");
     }
     SquareMat result = SquareMat::identity(size);
     SquareMat base(*this);
