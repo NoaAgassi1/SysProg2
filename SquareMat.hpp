@@ -1,10 +1,16 @@
-agassinoa20@gmail.com
+////agassinoa20@gmail.com
 #ifndef SQUARMAT_HPP
 #define SQUARMAT_HPP
 
 #include <iostream>
 
 namespace matrix {
+
+class MatrixException {
+    public:
+        const char* msg;
+        explicit MatrixException(const char* m) : msg(m) {}
+    };
 
 class SquareMat {
 private:
@@ -14,6 +20,7 @@ private:
     void copyMem(const SquareMat& other);
 
 public:
+    
     // Constructor and Destructor
     SquareMat(int n);
     SquareMat(int size, const double* initData);
